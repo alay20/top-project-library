@@ -16,15 +16,10 @@ var newTableRow = document.createElement('div');
 var newTitle = document.createElement('div');
 var newAuthor = document.createElement('div');
 var newPages = document.createElement('div');
-var finishedYesNoBtn = document.createElement('button');
+var statusBtn = document.createElement('button');
 var deleteBtn = document.createElement('button');
-
-
-
-var allDeleteBtns; 
 var bookNumber;
-
-// var domBookNumber;
+var clickedDeleteBtn;
 
 
 /*Disable form submit button until all required data entered*/
@@ -50,19 +45,22 @@ function Book(title, author, pages, finished) {
     this.pages = pages;
     this.finished = finished;
     this.toggleStatusYesNo = function () {
-        if (this.finished === "Yes") {
-            this.finished = "No";
-        } else if (this.finished === "No") {
-            this.finished = "Yes";
+        // const clickedStatusBtn = document.querySelector()
+        if (finished === "Yes") {
+            statusBtn.textContent = "No";
+        } else if (finished === "No") {
+            statusBtn.textContent =  "Yes";
         }
+        console.log('status button clicked');
     }
 }
 
 
 /*Function declaration*/
 
+//Function to add new book into table, the array myLibrary
 function addBookToLibrary (event) {
-    // Save book to array
+    
     const title = document.querySelector("#title").value;
     const author = document.querySelector("#author").value;
     const pages = document.querySelector("#pages").value;
@@ -75,11 +73,11 @@ function addBookToLibrary (event) {
     //Add object of new book to the array myLibrary
     myLibrary.push(newBook);
     
-    //Set variable for book number using length of the array myLibrary 
-    bookNumber = myLibrary.length; 
+    //Set variable for book number
+    bookNumber = myLibrary.indexOf(newBook);
     
     console.log(myLibrary);
-    console.log('Book number is equal to myLibrary array length: ' + bookNumber);
+    console.log('Book number is equal to myLibrary index: ' + bookNumber);
     
     event.preventDefault();
     
@@ -88,42 +86,34 @@ function addBookToLibrary (event) {
 
     //Create nodes for the new row in table for the new entered book
     newTableRow = document.createElement('div'); 
-    newTableRow.classList.add('table-container')
-    
-    // newTableRow.style.display = 'grid';
-    // newTableRow.style.gridTemplateColumns = '1fr 1fr 1fr 1fr 0.5fr';
-    // newTableRow.style.justifyItems = 'center';
-
+    newTableRow.classList.add('book-row-container')
     
     newTitle = document.createElement('div');
     newAuthor = document.createElement('div');
     newPages = document.createElement('div');
-    finishedYesNoBtn = document.createElement('button');
+    statusBtn = document.createElement('button');
+    statusBtn.classList.add('status-btn');
     deleteBtn = document.createElement('button');
     deleteBtn.classList.add('delete-btn');
     deleteBtn.textContent = "Remove";
     
     //Use data-attribute to attach book number to DOM node for whole row of elements
-    newTableRow.setAttribute('data-index', bookNumber);
-    deleteBtn.setAttribute('data-index', bookNumber);
+    // newTableRow.setAttribute('data-index', bookNumber);
+    // deleteBtn.setAttribute('data-index', bookNumber);
+    // statusBtn.setAttribute('data-index', bookNumber);
     
     
-    
-   
-    
-
     //Loop through myLibrary array to display most recently added book to table
     for (let i = 0; i < myLibrary.length; i++) {
         
         //Add new row-container to tableContainer as a sibling
         tableContainer.parentNode.insertBefore(newTableRow, newTableRow.nextSibling);
-        // tableContainer.appendChild(newTableRow);
-
-        // Add new title
+    
+        //Add new title
         newTitle.textContent = myLibrary[i].title;
         newTableRow.appendChild(newTitle);
 
-        // Add new author
+        //Add new author
         newAuthor.textContent = myLibrary[i].author;
         newTableRow.appendChild(newAuthor);
 
@@ -131,13 +121,17 @@ function addBookToLibrary (event) {
         newPages.textContent = myLibrary[i].pages;
         newTableRow.appendChild(newPages);
 
-        // Add new status button
-        finishedYesNoBtn.textContent = myLibrary[i].finished;
-        newTableRow.appendChild(finishedYesNoBtn);
+        //Add new status button
+        statusBtn.textContent = myLibrary[i].finished;
+        newTableRow.appendChild(statusBtn);
 
-        // Add new remove button 
+        //Add new remove button 
         newTableRow.appendChild(deleteBtn);
-        // allDeleteBtns = document.querySelectorAll('.delete-btn');
+
+        //Associate each item in myLibrary array with the data-index of item in table
+        newTableRow.setAttribute('data-index', i);
+        deleteBtn.setAttribute('data-index', i);
+        statusBtn.setAttribute('data-index', i);
     }
 
 
@@ -146,6 +140,7 @@ function addBookToLibrary (event) {
         submitBtn.disabled = true;
     }
 
+
     //Button to remove a book from the table
     deleteBtn.addEventListener('click', function (event) {
         clickedDeleteBtn = parseInt(event.target.getAttribute('data-index'))
@@ -153,44 +148,71 @@ function addBookToLibrary (event) {
         console.log("The clicked delete button is number " + clickedDeleteBtn);
 
         //Remove book object from the array myLibrary
-        removeBook(clickedDeleteBtn - 1);
+        removeBook(clickedDeleteBtn);
         console.log(myLibrary);
 
         //Remove book from DOM
         const rowToDelete = document.querySelector(`[data-index="${clickedDeleteBtn}"]`);
         rowToDelete.remove();
 
-        //Reset book number and data-index 
-        bookNumber = myLibrary.length; 
-        newTableRow.setAttribute('data-index', bookNumber);
-        deleteBtn.setAttribute('data-index', bookNumber);
+        
+        //Reset index numbers of entire row, remove button and status button based on new index in myLibrary array 
+        const books = document.querySelectorAll('.book-row-container');
+        books.forEach((book, index) => {
+            book.setAttribute('data-index', index);
+        });
 
+        const removeBtns = document.querySelectorAll('.delete-btn');
+        removeBtns.forEach((removeBtn, index) => {
+            removeBtn.setAttribute('data-index', index);
+        });
+
+        const statusButtons = document.querySelectorAll('.status-btn');
+        statusButtons.forEach((statusButton, index) => {
+            statusButton.setAttribute('data-index', index);
+        })
+
+        console.log(books);
+        console.log(removeBtns);
+        console.log(statusButtons);
+        
+        
+        
+
+        // resetBooksDataIndex();
+       
     })
 
     //Toggle button for status of book 
-    // finishedYesNoBtn.addEventListener('click', toggleYesNo)
+    statusBtn.addEventListener('click', newBook.toggleStatusYesNo)
 }
 
 
-
-
-
-
-
+//Function to remove book from myLibrary array 
 function removeBook (book) {
     myLibrary.splice(book, 1)
 }
 
 
 
+// function resetBooksDataIndex() {
+//     const books = document.querySelectorAll('book-row-conatiner');
+//     books.forEach((book, index) => {
+//         book.setAttribute('data-index', index);
+//         book.querySelector('.delete-btn[data-index]').setAttribute('data-index', index);
+//     });
+// }
+
+
+
 
 //Incorrect way of changing read status with button 
 // function toggleYesNo (event) {
-//     if (finishedYesNoBtn.textContent === "Yes") {
-//         finishedYesNoBtn.textContent = "No";
+//     if (statusBtn.textContent === "Yes") {
+//         statusBtn.textContent = "No";
 
-//     } else if (finishedYesNoBtn.textContent === "No") {
-//         finishedYesNoBtn.textContent = "Yes";
+//     } else if (statusBtn.textContent === "No") {
+//         statusBtn.textContent = "Yes";
 //     }
 // }
 
@@ -215,9 +237,9 @@ function removeBook (book) {
     // newTableRow.appendChild(newPages);
     
     /*New Status button*/
-    // finishedYesNoBtn = document.createElement('button');
-    // finishedYesNoBtn.textContent = finished;
-    // newTableRow.appendChild(finishedYesNoBtn);
+    // statusBtn = document.createElement('button');
+    // statusBtn.textContent = finished;
+    // newTableRow.appendChild(statusBtn);
     
     /*New Delete button*/
     // deleteBtn = document.createElement('button');
