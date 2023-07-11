@@ -7,7 +7,13 @@ let myLibrary = [];
 const submitBtn = document.querySelector(".submitBtn");
 const bookform = document.querySelector(".bookForm");
 
+//Button to submit new book
 submitBtn.addEventListener('click', addBookToLibrary)
+
+//Toggle button for status of book 
+// statusBtn.addEventListener('click', newBook.toggleStatusYesNo);
+
+
 
 
 /*Declare variables for each new row in table*/
@@ -20,6 +26,7 @@ var statusBtn = document.createElement('button');
 var deleteBtn = document.createElement('button');
 var bookNumber;
 var clickedDeleteBtn;
+var clickedStatusBtn;
 
 
 /*Disable form submit button until all required data entered*/
@@ -28,14 +35,7 @@ if (!bookform.checkValidity()) {
 }
 
 bookform.addEventListener("input", checkForm)
-
-function checkForm () {
-if (bookform.checkValidity()) {
-    submitBtn.disabled = false;
-} else {
-    submitBtn.disabled = true;
-}
-}
+ 
 
 
 /*Object constructor for new book*/
@@ -44,27 +44,42 @@ function Book(title, author, pages, finished) {
     this.author = author;
     this.pages = pages;
     this.finished = finished;
-    this.toggleStatusYesNo = function () {
+    this.toggleStatusYesNo = function (event) {
+        clickedStatusBtn = parseInt(event.target.getAttribute('data-index'));
+        console.log('The clicked status button is number ' + clickedStatusBtn);
+        
+        const changeStatusBtn = document.querySelectorAll(`.status-btn[data-index='${clickedStatusBtn}']`);
+        console.log(changeStatusBtn);
+        const clickedChangeStatusBtn = changeStatusBtn[0];
+
         // const clickedStatusBtn = document.querySelector()
-        if (finished === "Yes") {
-            statusBtn.textContent = "No";
-        } else if (finished === "No") {
-            statusBtn.textContent =  "Yes";
+        if (clickedChangeStatusBtn.textContent === 'Yes') {
+            clickedChangeStatusBtn.textContent = 'No';
+        } else if (clickedChangeStatusBtn.textContent === 'No') {
+            clickedChangeStatusBtn.textContent =  'Yes';
         }
-        console.log('status button clicked');
     }
 }
 
 
 /*Function declaration*/
 
+//Checks to ensure all input entered in form
+function checkForm () {
+    if (bookform.checkValidity()) {
+        submitBtn.disabled = false;
+    } else {
+        submitBtn.disabled = true;
+    }
+    }
+
 //Function to add new book into table, the array myLibrary
 function addBookToLibrary (event) {
     
-    const title = document.querySelector("#title").value;
-    const author = document.querySelector("#author").value;
-    const pages = document.querySelector("#pages").value;
-    const checkbox = document.querySelector("#finished");
+    const title = document.querySelector('#title').value;
+    const author = document.querySelector('#author').value;
+    const pages = document.querySelector('#pages').value;
+    const checkbox = document.querySelector('#finished');
     const finished = checkbox.checked ? checkbox.value : 'No';
 
     //Add book to object
@@ -77,11 +92,10 @@ function addBookToLibrary (event) {
     bookNumber = myLibrary.indexOf(newBook);
     
     console.log(myLibrary);
-    console.log('Book number is equal to myLibrary index: ' + bookNumber);
     
     event.preventDefault();
     
-    //Reset form for adding books
+    //Reset form for adding additional books
     bookform.reset(); 
 
     //Create nodes for the new row in table for the new entered book
@@ -97,12 +111,7 @@ function addBookToLibrary (event) {
     deleteBtn.classList.add('delete-btn');
     deleteBtn.textContent = "Remove";
     
-    //Use data-attribute to attach book number to DOM node for whole row of elements
-    // newTableRow.setAttribute('data-index', bookNumber);
-    // deleteBtn.setAttribute('data-index', bookNumber);
-    // statusBtn.setAttribute('data-index', bookNumber);
-    
-    
+
     //Loop through myLibrary array to display most recently added book to table
     for (let i = 0; i < myLibrary.length; i++) {
         
@@ -175,16 +184,11 @@ function addBookToLibrary (event) {
         console.log(books);
         console.log(removeBtns);
         console.log(statusButtons);
-        
-        
-        
-
-        // resetBooksDataIndex();
        
     })
 
     //Toggle button for status of book 
-    statusBtn.addEventListener('click', newBook.toggleStatusYesNo)
+    statusBtn.addEventListener('click', newBook.toggleStatusYesNo);
 }
 
 
