@@ -48,15 +48,19 @@ function Book(title, author, pages, finished) {
         clickedStatusBtn = parseInt(event.target.getAttribute('data-index'));
         console.log('The clicked status button is number ' + clickedStatusBtn);
         
+
         const changeStatusBtn = document.querySelectorAll(`.status-btn[data-index='${clickedStatusBtn}']`);
         console.log(changeStatusBtn);
         const clickedChangeStatusBtn = changeStatusBtn[0];
-
-        // const clickedStatusBtn = document.querySelector()
+        
         if (clickedChangeStatusBtn.textContent === 'Yes') {
             clickedChangeStatusBtn.textContent = 'No';
+            myLibrary[clickedStatusBtn].finished = 'No';
+            console.log(myLibrary);
         } else if (clickedChangeStatusBtn.textContent === 'No') {
             clickedChangeStatusBtn.textContent =  'Yes';
+            myLibrary[clickedStatusBtn].finished = 'Yes';
+            console.log(myLibrary);
         }
     }
 }
