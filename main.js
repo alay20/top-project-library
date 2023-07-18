@@ -1,18 +1,9 @@
-/*
-- data is displayed in a table
-- each row of table will have a button to remove the book
-- Each row with a book will have a button to change status of book between read and not read */
-
 let myLibrary = [];
 const submitBtn = document.querySelector(".submit-btn");
 const bookform = document.querySelector(".bookForm");
 
 //Button to submit new book
 submitBtn.addEventListener('click', addBookToLibrary)
-
-//Toggle button for status of book 
-// statusBtn.addEventListener('click', newBook.toggleStatusYesNo);
-
 
 
 
