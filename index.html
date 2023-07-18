@@ -9,45 +9,47 @@
 </head>
 
 <body>
-<h1>my library</h1>
-<p>Add books to your library to keep track of books you are reading.</p>
-<form class="bookForm">
-    <p>
-        <label for="title">Title</label>
-        <input type="text" id="title" name="title" required autofocus>
-    </p>
-    <p>
-        <label for="author">Author</label>
-        <input type="text" id="author" name="author" required>
-    </p>
-    <p>
-        <label for="pages">Pages</label>
-        <input type="number" id="pages" name="pages" required>
-    </p>
+<div class="large-container">
+    <div class="form-container">
+        <h1>my library</h1>
+        <p>Add books to your library to keep track of books you are reading.</p>
+        <form class="bookForm">
+            <p>
+                <label for="title">Title</label><br>
+                <input type="text" id="title" name="title" required autofocus>
+            </p>
+            <p>
+                <label for="author">Author</label><br>
+                <input type="text" id="author" name="author" required>
+            </p>
+            <p>
+                <label for="pages">Pages</label><br>
+                <input type="number" id="pages" name="pages" required>
+            </p>
 
-    <p>
-        <label for="finished">Have you finished reading the book?</label>
-        <input type="checkbox" id="finished" name="read" value="Yes">
-    </p>
-    
-    
-    <p>
-        <button class="submitBtn" type="submit">Add New Book</button>
-    </p>
-</form>
+            <p>
+                <label for="finished">Have you finished reading the book?</label>
+                <input type="checkbox" id="finished" name="read" value="Yes">
+            </p>
+            
+            
+            <p>
+                <button class="submit-btn" type="submit">Add New Book</button>
+            </p>
+        </form>
+    </div>
 
-<div class="table-container">
-    <div class="table-header">Title</div>
-    <div class="table-header">Author</div>
-    <div class="table-header">No. of Pages</div>
-    <div class="table-header">Finished Reading?</div>
-    <div class="table-header"></div>
+    <div class="table-container">
+        <div class="table-header-container">
+            <div class="table-header">Title</div>
+            <div class="table-header">Author</div>
+            <div class="table-header">No. of Pages</div>
+            <div class="table-header">Finished Reading?</div>
+            <div class="table-header"></div>
+        </div>
+    </div>
+
 </div>
-
-
-
-
-
 
 <script src ="main.js"></script>    
 </body>

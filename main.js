@@ -4,7 +4,7 @@
 - Each row with a book will have a button to change status of book between read and not read */
 
 let myLibrary = [];
-const submitBtn = document.querySelector(".submitBtn");
+const submitBtn = document.querySelector(".submit-btn");
 const bookform = document.querySelector(".bookForm");
 
 //Button to submit new book
@@ -17,7 +17,7 @@ submitBtn.addEventListener('click', addBookToLibrary)
 
 
 /*Declare variables for each new row in table*/
-var tableContainer = document.querySelector('.table-container');
+var tableHeaderContainer = document.querySelector('.table-header-container');
 var newTableRow = document.createElement('div'); 
 var newTitle = document.createElement('div');
 var newAuthor = document.createElement('div');
@@ -105,22 +105,25 @@ function addBookToLibrary (event) {
     //Create nodes for the new row in table for the new entered book
     newTableRow = document.createElement('div'); 
     newTableRow.classList.add('book-row-container')
+    newTableRow.style.placeItems = 'center';
     
     newTitle = document.createElement('div');
     newAuthor = document.createElement('div');
     newPages = document.createElement('div');
     statusBtn = document.createElement('button');
     statusBtn.classList.add('status-btn');
+    statusBtn.style.alignSelf = 'center';
     deleteBtn = document.createElement('button');
     deleteBtn.classList.add('delete-btn');
     deleteBtn.textContent = "Remove";
+    deleteBtn.style.alignSelf = 'center';
     
 
     //Loop through myLibrary array to display most recently added book to table
     for (let i = 0; i < myLibrary.length; i++) {
         
-        //Add new row-container to tableContainer as a sibling
-        tableContainer.parentNode.insertBefore(newTableRow, newTableRow.nextSibling);
+        //Add new row-container to tableHeaderContainer as a sibling
+        tableHeaderContainer.parentNode.insertBefore(newTableRow, newTableRow.nextSibling);
     
         //Add new title
         newTitle.textContent = myLibrary[i].title;

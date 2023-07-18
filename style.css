@@ -1,6 +1,63 @@
-.table-container, 
+body {
+    margin: 0 0 0 0;
+}
+
+.large-container {
+    display: grid;
+    grid-template-columns: 0.25fr 1fr;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgb(236,221,174);
+}
+
+.form-container {
+    background-color: rgb(140, 156, 118);
+    padding-left: 20px;
+    padding-right: 20px;
+    box-shadow: 4px 2px 2px rgba(0,0,0,0.2);
+}
+
+.submit-btn,
+.delete-btn,
+.status-btn {
+    background-color: rgb(197,171,157);
+    border-radius: 5px;
+    padding: 7px;
+}
+
+.submit-btn:hover,
+.delete-btn:hover,
+.status-btn:hover {
+    background-color: rgb(171,120,120);
+}
+
+.table-header-container,
 .book-row-container {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 0.5fr;
     justify-items: center;
+    
+}
+
+.table-header-container {
+    background-color: rgb(85,101,107);
+    color: white;
+    padding: 25px 0px 25px 0px;
+    margin: 50px 20px 0px 20px;
+    border-radius: 5px;
+    box-shadow: 4px 4px 2px rgba(0,0,0,0.2);
+}
+
+.book-row-container {
+    margin: 20px 20px 20px 20px;
+    padding-bottom: 20px;
+    border-bottom: 3px dotted rgb(171,120,120);
+}
+
+.table-header {
+    font-weight: bolder;
+    font-size: 17.5px;
 }
