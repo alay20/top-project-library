@@ -1,10 +1,12 @@
 let myLibrary = [];
 const submitBtn = document.querySelector(".submit-btn");
-const bookform = document.querySelector(".bookForm");
+const bookForm = document.querySelector(".bookForm");
 
-//Button to submit new book
+//Button to add new book disabled by default
+submitBtn.disabled = true;
+
+//To submit new book by clicking submit button
 submitBtn.addEventListener('click', addBookToLibrary)
-
 
 
 /*Declare variables for each new row in table*/
@@ -21,21 +23,52 @@ var clickedStatusBtn;
 
 
 /*Disable form submit button until all required data entered*/
-if (!bookform.checkValidity()) {
-    submitBtn.disabled = true;
-}
-
-bookform.addEventListener("input", checkForm)
- 
+bookForm.addEventListener("input", checkForm)
 
 
-/*Object constructor for new book*/
-function Book(title, author, pages, finished) {
+
+const tableElements =(()=>{
+    const submitBtn = document.querySelector(".submit-btn");
+    const bookForm = document.querySelector(".bookForm");
+    var tableHeaderContainer = document.querySelector('.table-header-container');
+    var newTableRow = document.createElement('div'); 
+    var newTitle = document.createElement('div');
+    var newAuthor = document.createElement('div');
+    var newPages = document.createElement('div');
+    var statusBtn = document.createElement('button');
+    var deleteBtn = document.createElement('button');
+    var bookNumber;
+    var clickedDeleteBtn;
+    var clickedStatusBtn;
+
+    return {submitBtn, bookForm, tableHeaderContainer, newTableRow, newTitle, newAuthor, newPages, statusBtn, deleteBtn, bookNumber, clickedDeleteBtn, clickedStatusBtn}
+})
+
+
+const library =(() => {
+    //Array to store each individual book object
+    let myLibrary = [];
+
+    //Function to get myLibrary array 
+    const getMyLibrary = () => myLibrary;
+
+    return {getMyLibrary};
+
+})();
+
+
+
+
+/*Use Class to create objects*/
+class Book {
+    constructor (title, author, pages, finished) {
     this.title = title;
     this.author = author;
     this.pages = pages;
     this.finished = finished;
-    this.toggleStatusYesNo = function (event) {
+    }
+
+    toggleStatusYesNo(event) {
         clickedStatusBtn = parseInt(event.target.getAttribute('data-index'));
         console.log('The clicked status button is number ' + clickedStatusBtn);
         
@@ -53,7 +86,7 @@ function Book(title, author, pages, finished) {
             myLibrary[clickedStatusBtn].finished = 'Yes';
             console.log(myLibrary);
         }
-    }
+    }  
 }
 
 
@@ -61,7 +94,7 @@ function Book(title, author, pages, finished) {
 
 //Checks to ensure all input entered in form
 function checkForm () {
-    if (bookform.checkValidity()) {
+    if (bookForm.checkValidity()) {
         submitBtn.disabled = false;
     } else {
         submitBtn.disabled = true;
@@ -91,7 +124,7 @@ function addBookToLibrary (event) {
     event.preventDefault();
     
     //Reset form for adding additional books
-    bookform.reset(); 
+    bookForm.reset(); 
 
     //Create nodes for the new row in table for the new entered book
     newTableRow = document.createElement('div'); 
@@ -143,7 +176,7 @@ function addBookToLibrary (event) {
 
 
     //Disable Submit button if all required fields not entered
-    if (!bookform.checkValidity()) {
+    if (!bookForm.checkValidity()) {
         submitBtn.disabled = true;
     }
 
@@ -188,7 +221,6 @@ function addBookToLibrary (event) {
     //Toggle button for status of book 
     statusBtn.addEventListener('click', newBook.toggleStatusYesNo);
 }
-
 
 //Function to remove book from myLibrary array 
 function removeBook (book) {
