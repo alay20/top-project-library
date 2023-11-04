@@ -1,49 +1,13 @@
-let myLibrary = [];
-const submitBtn = document.querySelector(".submit-btn");
-const bookForm = document.querySelector(".bookForm");
-
-//Button to add new book disabled by default
-submitBtn.disabled = true;
-
-//To submit new book by clicking submit button
-submitBtn.addEventListener('click', addBookToLibrary)
-
-
-/*Declare variables for each new row in table*/
-var tableHeaderContainer = document.querySelector('.table-header-container');
-var newTableRow = document.createElement('div'); 
-var newTitle = document.createElement('div');
-var newAuthor = document.createElement('div');
-var newPages = document.createElement('div');
-var statusBtn = document.createElement('button');
-var deleteBtn = document.createElement('button');
-var bookNumber;
-var clickedDeleteBtn;
-var clickedStatusBtn;
-
-
-/*Disable form submit button until all required data entered*/
-bookForm.addEventListener("input", checkForm)
-
-
-
-const tableElements =(()=>{
+//Module for elements in form
+const formElements =(()=>{
     const submitBtn = document.querySelector(".submit-btn");
     const bookForm = document.querySelector(".bookForm");
-    var tableHeaderContainer = document.querySelector('.table-header-container');
-    var newTableRow = document.createElement('div'); 
-    var newTitle = document.createElement('div');
-    var newAuthor = document.createElement('div');
-    var newPages = document.createElement('div');
-    var statusBtn = document.createElement('button');
-    var deleteBtn = document.createElement('button');
-    var bookNumber;
-    var clickedDeleteBtn;
-    var clickedStatusBtn;
 
-    return {submitBtn, bookForm, tableHeaderContainer, newTableRow, newTitle, newAuthor, newPages, statusBtn, deleteBtn, bookNumber, clickedDeleteBtn, clickedStatusBtn}
-})
+    return {submitBtn, bookForm}
+})();
 
+//Button to add new book disabled by default
+formElements.submitBtn.disabled = true;
 
 const library =(() => {
     //Array to store each individual book object
@@ -57,87 +21,105 @@ const library =(() => {
 })();
 
 
+//Module for using class to create book objects 
+const bookModule = {
+    
+    createBook: class {
+        constructor (title, author, pages, finished) {
+            this.title = title;
+            this.author = author;
+            this.pages = pages;
+            this.finished = finished;
+            }
+
+        toggleStatusYesNo(event) {
+            let myLibrary = library.getMyLibrary();
+            let clickedStatusBtn = parseInt(event.target.getAttribute('data-index'));
+            console.log('The clicked status button is number ' + clickedStatusBtn);
+            
+
+            const changeStatusBtn = document.querySelectorAll(`.status-btn[data-index='${clickedStatusBtn}']`);
+            console.log(changeStatusBtn);
+            const clickedChangeStatusBtn = changeStatusBtn[0];
+            
+            if (clickedChangeStatusBtn.textContent === 'Yes') {
+                clickedChangeStatusBtn.textContent = 'No';
+                myLibrary[clickedStatusBtn].finished = 'No';
+                console.log(myLibrary);
+            } else if (clickedChangeStatusBtn.textContent === 'No') {
+                clickedChangeStatusBtn.textContent =  'Yes';
+                myLibrary[clickedStatusBtn].finished = 'Yes';
+                console.log(myLibrary);
+            }
+        }  
+    }};
 
 
-/*Use Class to create objects*/
-class Book {
-    constructor (title, author, pages, finished) {
-    this.title = title;
-    this.author = author;
-    this.pages = pages;
-    this.finished = finished;
-    }
 
-    toggleStatusYesNo(event) {
-        clickedStatusBtn = parseInt(event.target.getAttribute('data-index'));
-        console.log('The clicked status button is number ' + clickedStatusBtn);
-        
+//Turn the delcared functions into a module
 
-        const changeStatusBtn = document.querySelectorAll(`.status-btn[data-index='${clickedStatusBtn}']`);
-        console.log(changeStatusBtn);
-        const clickedChangeStatusBtn = changeStatusBtn[0];
-        
-        if (clickedChangeStatusBtn.textContent === 'Yes') {
-            clickedChangeStatusBtn.textContent = 'No';
-            myLibrary[clickedStatusBtn].finished = 'No';
-            console.log(myLibrary);
-        } else if (clickedChangeStatusBtn.textContent === 'No') {
-            clickedChangeStatusBtn.textContent =  'Yes';
-            myLibrary[clickedStatusBtn].finished = 'Yes';
-            console.log(myLibrary);
-        }
-    }  
-}
+const functionsModule = (() => {
 
-
-/*Function declaration*/
+let myLibrary = library.getMyLibrary(); 
 
 //Checks to ensure all input entered in form
-function checkForm () {
-    if (bookForm.checkValidity()) {
-        submitBtn.disabled = false;
+const checkForm = () => {
+    if (formElements.bookForm.checkValidity()) {
+        formElements.submitBtn.disabled = false;
     } else {
-        submitBtn.disabled = true;
+        formElements.submitBtn.disabled = true;
     }
-    }
+    };
+
 
 //Function to add new book into table, the array myLibrary
-function addBookToLibrary (event) {
-    
+
+const addBookToLibrary = (event) => {    
     const title = document.querySelector('#title').value;
     const author = document.querySelector('#author').value;
     const pages = document.querySelector('#pages').value;
     const checkbox = document.querySelector('#finished');
     const finished = checkbox.checked ? checkbox.value : 'No';
+    
+    
 
+   
     //Add book to object
-    var newBook = new Book(title, author, pages, finished)
+    const newBook = new bookModule.createBook(title, author, pages, finished);
     
     //Add object of new book to the array myLibrary
     myLibrary.push(newBook);
     
     //Set variable for book number
-    bookNumber = myLibrary.indexOf(newBook);
+    let bookNumber = myLibrary.indexOf(newBook); //don't need?? not used
     
     console.log(myLibrary);
     
     event.preventDefault();
     
-    //Reset form for adding additional books
-    bookForm.reset(); 
+    //Reset form for adding additional books using .reset() method
+    formElements.bookForm.reset(); 
 
-    //Create nodes for the new row in table for the new entered book
-    newTableRow = document.createElement('div'); 
+    
+
+
+    //Create nodes for the new row in table for the newly entered book
+    let tableHeaderContainer = document.querySelector('.table-header-container');
+    
+
+    let newTableRow = document.createElement('div'); 
     newTableRow.classList.add('book-row-container')
     newTableRow.style.placeItems = 'center';
     
-    newTitle = document.createElement('div');
-    newAuthor = document.createElement('div');
-    newPages = document.createElement('div');
-    statusBtn = document.createElement('button');
+    let newTitle = document.createElement('div');
+    let newAuthor = document.createElement('div');
+    let newPages = document.createElement('div');
+    
+    let statusBtn = document.createElement('button');
     statusBtn.classList.add('status-btn');
     statusBtn.style.alignSelf = 'center';
-    deleteBtn = document.createElement('button');
+    
+    let deleteBtn = document.createElement('button');
     deleteBtn.classList.add('delete-btn');
     deleteBtn.textContent = "Remove";
     deleteBtn.style.alignSelf = 'center';
@@ -176,14 +158,14 @@ function addBookToLibrary (event) {
 
 
     //Disable Submit button if all required fields not entered
-    if (!bookForm.checkValidity()) {
-        submitBtn.disabled = true;
+    if (!formElements.bookForm.checkValidity()) {
+        formElements.submitBtn.disabled = true;
     }
 
 
     //Button to remove a book from the table
     deleteBtn.addEventListener('click', function (event) {
-        clickedDeleteBtn = parseInt(event.target.getAttribute('data-index'))
+        let clickedDeleteBtn = parseInt(event.target.getAttribute('data-index'))
         
         console.log("The clicked delete button is number " + clickedDeleteBtn);
 
@@ -223,79 +205,29 @@ function addBookToLibrary (event) {
 }
 
 //Function to remove book from myLibrary array 
-function removeBook (book) {
+const removeBook = (book) => {
     myLibrary.splice(book, 1)
 }
 
+return {checkForm, addBookToLibrary, removeBook}
+
+})();
+
+//To submit new book by clicking submit button
+formElements.submitBtn.addEventListener('click', functionsModule.addBookToLibrary)
+
+/*Disable form submit button until all required data entered*/
+formElements.bookForm.addEventListener("input", functionsModule.checkForm)
 
 
-// function resetBooksDataIndex() {
-//     const books = document.querySelectorAll('book-row-conatiner');
-//     books.forEach((book, index) => {
-//         book.setAttribute('data-index', index);
-//         book.querySelector('.delete-btn[data-index]').setAttribute('data-index', index);
-//     });
-// }
-
-
-
-
-//Incorrect way of changing read status with button 
-// function toggleYesNo (event) {
-//     if (statusBtn.textContent === "Yes") {
-//         statusBtn.textContent = "No";
-
-//     } else if (statusBtn.textContent === "No") {
-//         statusBtn.textContent = "Yes";
-//     }
-// }
-
-
-
-/*Incorrect way of displaying books in table*/
-
-/*Display new book in table*/
-    /*New Title*/
-    // newTitle = document.createElement('div');
-    // newTitle.textContent = title;
-    // newTableRow.appendChild(newTitle);
-
-    /*New Author*/
-    // newAuthor = document.createElement('div');
-    // newAuthor.textContent = author;
-    // newTableRow.appendChild(newAuthor);
-
-    /*New No. of Pages*/
-    // newPages = document.createElement('div');
-    // newPages.textContent = pages;
-    // newTableRow.appendChild(newPages);
-    
-    /*New Status button*/
-    // statusBtn = document.createElement('button');
-    // statusBtn.textContent = finished;
-    // newTableRow.appendChild(statusBtn);
-    
-    /*New Delete button*/
-    // deleteBtn = document.createElement('button');
-    // deleteBtn.textContent = "Remove";
-    // newTableRow.appendChild(deleteBtn);
-
-
-        // Array.from(allDeleteBtns).forEach(allDeleteBtn => {
-    //     allDeleteBtn.addEventListener('click', function () {
-    //         bookIndex = parseInt(domBookNumber);
-    //         // const bookIndex = parseInt(this.dataset.index);
-    //         removeBook(bookIndex - 1);
-    //         console.log(myLibrary);
-    //     });
-    // });
-
-
-     //Make sure book is indexed to bookNumber or length of the array myLibrary 
-    // domBookNumber = deleteBtn.dataset.index;
-    // console.log('Data index of book is: '+ domBookNumber);
-
-
-//Removing the deleted row one element at a time
-    // const elementsSameDataIndex = document.querySelectorAll(`[data-index="${clickedDeleteBtn - 1}"]`)
-    // elementsSameDataIndex.remove();
+/*Declare variables for each new row in table*/
+// var tableHeaderContainer = document.querySelector('.table-header-container');
+// var newTableRow = document.createElement('div'); 
+// // var newTitle = document.createElement('div');
+// var newAuthor = document.createElement('div');
+// var newPages = document.createElement('div');
+// var statusBtn = document.createElement('button');
+// var deleteBtn = document.createElement('button');
+// var bookNumber;
+// var clickedDeleteBtn;
+// var clickedStatusBtn;
