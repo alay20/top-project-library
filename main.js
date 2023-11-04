@@ -218,16 +218,3 @@ formElements.submitBtn.addEventListener('click', functionsModule.addBookToLibrar
 
 /*Disable form submit button until all required data entered*/
 formElements.bookForm.addEventListener("input", functionsModule.checkForm)
-
-
-/*Declare variables for each new row in table*/
-// var tableHeaderContainer = document.querySelector('.table-header-container');
-// var newTableRow = document.createElement('div'); 
-// // var newTitle = document.createElement('div');
-// var newAuthor = document.createElement('div');
-// var newPages = document.createElement('div');
-// var statusBtn = document.createElement('button');
-// var deleteBtn = document.createElement('button');
-// var bookNumber;
-// var clickedDeleteBtn;
-// var clickedStatusBtn;
